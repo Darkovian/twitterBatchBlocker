@@ -83,7 +83,7 @@ def do_blocks(api: tweepy.API, np_ids):
                 api.create_block(user_id=user_id)
                 break
             except tweepy.RateLimitError:
-                print('\nRate limiting detected. Waiting 15 minutes before resuming...\n')
+                print(f'\n[{time.localtime().tm_hour}:{time.localtime().tm_min}] Rate limiting detected. Waiting 15 minutes before resuming...\n')
                 time.sleep(15*60)
                 continue
             except Exception as e:
