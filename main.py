@@ -103,9 +103,15 @@ def do_blocks(api: tweepy.API, np_ids):
                 if 'lock' in str(e):
                     print('WARNING: Twitter may have locked the account. Visit Twitter to unlock it. Exiting.')
                     sys.exit(1)
-                else:
+                elif 'exist' in str(e) or 'found' in str(e) or 'find' in str(e):
                     print(f'\nError blocking {user_id}.\n\tError: {str(e)}\n')
                     break
+                else:
+                    print(f'\nError blocking {user_id}.\n\tError: {str(e)}\n')
+                    if input('Continue? (Y/N): ').lower() == 'y':
+                        break
+                    else:
+                        sys.exit(1)
 
         curr_block += 1
         last_percent = curr_percent
