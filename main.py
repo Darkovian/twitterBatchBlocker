@@ -9,6 +9,10 @@ import tweepy
 
 
 def handle_secrets() -> tweepy.OAuthHandler:
+    """
+    Checks for a keys file. If one is found, loads those keys. Otherwise it prompts the user to input the consumer key and secret, and saves them to a new keys file.
+    Returns a tweepy OAuthHandler object.
+    """
     if os.path.exists('./keys'):
         with open('./keys', 'rb') as f:
             KEYS = pickle.load(f)
@@ -23,6 +27,10 @@ def handle_secrets() -> tweepy.OAuthHandler:
 
 
 def handle_user_secrets(tweepy_auth: tweepy.OAuthHandler) -> tweepy.API:
+    """
+    Checks for a tokens.pkl file. If one is found it loads those tokens, otherwise it initiates user authentication and saves those tokens to tokens.pkl.
+    Returns a tweepy api object.
+    """
     if not os.path.exists('./tokens.pkl'):
         try:
             redirect_url = tweepy_auth.get_authorization_url()
@@ -56,6 +64,10 @@ def handle_user_secrets(tweepy_auth: tweepy.OAuthHandler) -> tweepy.API:
 
 
 def get_users_to_block(api: tweepy.API):
+    """
+    Takes a tweepy api object. Prompts user to input username of account to block the followers of.
+    Returns an array of user_ids which are not already blocked by the authenticated user.
+    """
     block_user = input('Enter screen name of user to block all followers of that user. Do not include @: ')
     my_blocks = np.asarray(api.blocks_ids())
     already_blocked = 0
@@ -75,6 +87,7 @@ def get_users_to_block(api: tweepy.API):
 
 
 def do_blocks(api: tweepy.API, np_ids):
+    """ Takes a tweepy api object and an array of user_ids and blocks each id as the authenticated user """
     curr_block = 1
     curr_percent = 0.0
     for user_id in np_ids:
